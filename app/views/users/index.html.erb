@@ -7,27 +7,23 @@
     <div class="col-xs-9">
       <h2>Books</h2>
       <table class="table table-hover table-inverse">
-        <% @books.each do |book| %>
+        <% @users.each do |user| %>
         <thead>
           <tr>
-
-            <th>Title</th>
-            <th>Opinion</th>
+            <th>image</th>
+            <th>name</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>
-              <%= link_to user_path(book.id) do %>
-                <%= attachment_image_tag book.user, :profile_image, :fill, 40, 40, format: 'jpeg', class: "img-circle pull-left profile-thumb", fallback: "no_image.jpg" %></td>
-              <% end %>
+              <%= attachment_image_tag user, :profile_image, :fill, 40, 40, format: 'jpeg', class: "img-circle pull-left profile-thumb", fallback: "no_image.jpg" %></td>
             <td>
-              <%= link_to book_path(book.id) do %>
-                <%= book.title %>
-              <% end %>
+              <%= user.name %>
             </td>
             <td>
-              <%= book.body %>
+              <%= link_to "Show", user_path(user.id) %>
             </td>
           </tr>
         </tbody>
@@ -36,4 +32,3 @@
     </div>
   </div>
 </div>
-

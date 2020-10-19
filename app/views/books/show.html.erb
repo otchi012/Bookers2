@@ -3,16 +3,68 @@
     <%= notice %>
   </p>
   <div class="row">
-    <%= render 'books/newbook', book: @book, user: @user %>
+    <% if @book_new.errors.any? %>
+      <div id="error_explanation">
+        <h3><%= @book_new.errors.count %>errors prohibited this obj from being saved:</h2>
+        <ul>
+        <% @book_new.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="col-xs-3">
+      <h2>User info</h2>
+       <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "no_image.jpg" %>
+       <table class="table">
+        <tbody>
+          <tr></tr>
+          <tr>
+            <th>name</th>
+            <th><%= @user.name %></th>
+          </tr>
+          <tr>
+            <th>introduction</th>
+            <th><%= @user.introduction %></th>
+          </tr>
+        </tbody>
+      </table>
+      <div class="row">
+        <% if @user.id == current_user.id %>
+          <%= link_to edit_user_path(current_user.id), class:"col-xs-12 btn btn-default" do %>
+            <i class="glyphicon glyphicon-wrench"></i>
+          <% end %>
+        <% else %>
+          <%= link_to user_path(current_user.id), class:"col-xs-12 btn btn-default" do %>
+            <i class="glyphicon glyphicon-wrench"></i>
+          <% end %>
+        <% end %>
+      </div>
+      <h2>New book</h2>
+      <%= form_with model:@book_new, local:true do |f| %>
+        <div class="field row">
+          <label>Title</label>
+          <%= f.text_field :title, class:"col-xs-12 book_title" %>
+        </div>
+        <div class="field row">
+          <label>Opinion</label>
+          <%= f.text_area :body, class:"col-xs-12 book_body" %>
+        </div>
+        <div class="actions row">
+          <%= f.submit "Create Book", class:"btn btn-primary col-xs-12"%>
+        </div>
+      <% end %>
+    </div>
     <div class="col-xs-9">
       <h2>Book detail</h2>
-      <table class="table table-hover table-inverse">
+      <table class="table">
         <tbody>
           <tr>
             <td>
-              <%= link_to user_path(@user.id) do %>
-                <%= attachment_image_tag @user, :profile_image, :fill, 40, 40, format: 'jpeg', class: "img-circle pull-left profile-thumb", fallback: "no_image.jpg" %></td>
+              <%= link_to user_path(@book.id) do %>
+                <%= attachment_image_tag @book.user, :profile_image, :fill, 40, 40, format: 'jpeg', class: "img-circle pull-left profile-thumb", fallback: "no_image.jpg" %>
               <% end %>
+            </td>
             <td>
               <%= link_to book_path(@book.id) do %>
                 <%= @book.title %>
@@ -21,12 +73,14 @@
             <td>
               <%= @book.body %>
             </td>
-            <tb>
-              <%= link_to "Edit", edit_book_path(@book.id), class:"btn-sm btn-success" %>
-            </tb>
-            <tb>
-              <%= link_to "Destroy", destroy_book_path(@book.id), method: :delete, "data-confirm" =>"本当に消しますか？", class:"btn-sm btn-danger" %>
-            </tb>
+            <%if @book.user == current_user %>
+              <td>
+                <%= link_to "Edit", edit_book_path(@book.id), class:"btn-sm btn-success" %>
+              </td>
+              <td>
+                <%= link_to "Destroy", book_path(@book.id), method: :delete, "data-confirm" =>"本当に消しますか？", class:"btn-sm btn-danger" %>
+              </td>
+            <% end %>
           </tr>
         </tbody>
       </table>
