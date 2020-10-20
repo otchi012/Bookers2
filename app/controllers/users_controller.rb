@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     if @user.id == current_user.id
       render "edit"
     else
-      redirect_to user_path(params[:id])
+      redirect_to user_path(current_user)
     end
   end
 
