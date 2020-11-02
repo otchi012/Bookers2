@@ -22,6 +22,14 @@
             <th>introduction</th>
             <th><%= user.introduction %></th>
           </tr>
+          <tr>
+            <td>follows</td>
+            <td><%= user.follower.count %></td>
+          </tr>
+          <tr>
+            <td>followers</td>
+            <td><%= user.followed.count %></td>
+          </tr>
         </tbody>
       </table>
       <div class="row">
@@ -30,8 +38,10 @@
             <i class="glyphicon glyphicon-wrench"></i>
           <% end %>
         <% else %>
-          <%= link_to user_path(current_user.id), class:"col-xs-12 btn btn-default" do %>
-            <i class="glyphicon glyphicon-wrench"></i>
+          <% if current_user.following?(user) %>
+            <%= link_to "フォローを外す", relationship_path, method: :delete, class:"col-xs-12 btn btn-default" %>
+          <% else %>
+            <%= link_to "フォローする", relationships_path, method: :post, class:"col-xs-12 btn btn-default" %>
           <% end %>
         <% end %>
       </div>
