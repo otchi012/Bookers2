@@ -9,54 +9,68 @@
   </div>
 <% end %>
 <div class="col-xs-3">
-      <h2>User info</h2>
-       <%= attachment_image_tag user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "no_image.jpg" %>
-       <table class="table">
-        <tbody>
-          <tr></tr>
-          <tr>
-            <th>name</th>
-            <th><%= user.name %></th>
-          </tr>
-          <tr>
-            <th>introduction</th>
-            <th><%= user.introduction %></th>
-          </tr>
-          <tr>
-            <td>follows</td>
-            <td><%= user.follower.count %></td>
-          </tr>
-          <tr>
-            <td>followers</td>
-            <td><%= user.followed.count %></td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="row">
-        <% if user.id == current_user.id %>
-          <%= link_to edit_user_path(current_user.id), class:"col-xs-12 btn btn-default" do %>
-            <i class="glyphicon glyphicon-wrench"></i>
+    <h2>User info</h2>
+     <%= attachment_image_tag user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "no_image.jpg" %>
+     <table class="table">
+      <tbody>
+        <tr></tr>
+        <tr>
+          <th>name</th>
+          <th><%= user.name %></th>
+        </tr>
+        <tr>
+          <th>introduction</th>
+          <th><%= user.introduction %></th>
+        </tr>
+        <tr>
+          <td>follows</td>
+          <td>
+            <%= link_to following_user_path(user) do %>
+              <%= user.following.count %>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td>followers</td>
+          <td>
+            <%= link_to followers_user_path(user) do %>
+              <%= user.followers.count %>
+            <% end %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row">
+      <% if user.id == current_user.id %>
+        <%= link_to edit_user_path(current_user.id), class:"col-xs-12 btn btn-default" do %>
+          <i class="glyphicon glyphicon-wrench"></i>
+        <% end %>
+
+      <% else %>
+        <% if current_user.following?(user) %>
+          <%= form_for(current_user.active_relationships.find_by(followed_id: user.id), html: { method: :delete }) do |f| %>
+            <%= f.submit "フォロー外す", class: "btn" %>
           <% end %>
         <% else %>
-          <% if current_user.following?(user) %>
-            <%= link_to "フォローを外す", relationship_path, method: :delete, class:"col-xs-12 btn btn-default" %>
-          <% else %>
-            <%= link_to "フォローする", relationships_path, method: :post, class:"col-xs-12 btn btn-default" %>
+          <%= form_with model: current_user.active_relationships.build do |f| %>
+            <%= hidden_field_tag :followed_id, user.id %>
+            <%= f.submit "フォローする", class: "btn" %>
           <% end %>
         <% end %>
-      </div>
-      <h2>New book</h2>
-      <%= form_with model:book, local:true do |f| %>
-        <div class="field row">
-          <label>Title</label>
-          <%= f.text_field :title, class:"col-xs-12 book_title" %>
-        </div>
-        <div class="field row">
-          <label>Opinion</label>
-          <%= f.text_area :body, class:"col-xs-12 book_body" %>
-        </div>
-        <div class="actions row">
-          <%= f.submit "Create Book", class:"btn btn-primary col-xs-12"%>
-        </div>
       <% end %>
     </div>
+    <h2>New book</h2>
+    <%= form_with model:book, local:true do |f| %>
+      <div class="field row">
+        <label>Title</label>
+        <%= f.text_field :title, class:"col-xs-12 book_title" %>
+      </div>
+      <div class="field row">
+        <label>Opinion</label>
+        <%= f.text_area :body, class:"col-xs-12 book_body" %>
+      </div>
+      <div class="actions row">
+        <%= f.submit "Create Book", class:"btn btn-primary col-xs-12"%>
+      </div>
+    <% end %>
+  </div>

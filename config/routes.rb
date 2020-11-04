@@ -7,6 +7,8 @@ Rails.application.routes.draw do
       get :following, :followers
     end
   end
+  # post 'relationship/:id' => 'relationships#create', as: 'relationship'
+  # delete 'relationship/:id' => 'relationships#destroy', as: 'destroy_relationship'
   resources :relationships, only: [:create, :destroy]
   resources :books, only: [:create, :index, :show, :edit, :update, :destroy]do
     resource :favorites, only: [:create, :destroy]
