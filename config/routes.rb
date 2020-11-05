@@ -6,10 +6,10 @@ Rails.application.routes.draw do
     member do
       get :following, :followers
     end
-  end
   # post 'relationship/:id' => 'relationships#create', as: 'relationship'
   # delete 'relationship/:id' => 'relationships#destroy', as: 'destroy_relationship'
-  resources :relationships, only: [:create, :destroy]
+    resource :relationships, only: [:create, :destroy]
+  end
   resources :books, only: [:create, :index, :show, :edit, :update, :destroy]do
     resource :favorites, only: [:create, :destroy]
     resources :book_comments, only: [:create, :destroy]

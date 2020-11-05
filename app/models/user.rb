@@ -18,17 +18,17 @@ class User < ApplicationRecord
   attachment :profile_image
 
   # ユーザーをフォローする
-  def follow(other_user)
-    following << other_user
+  def follow(user_id)
+    active_relationships.create(followed_id: user_id)
   end
 
   # ユーザーをフォロー解除する
-  def unfollow(other_user)
-    active_relationships.find_by(followed_id: other_user.id).destroy
+  def unfollow(user_id)
+    active_relationships.find_by(followed_id: user_id).destroy
   end
 
   # 現在のユーザーがフォローしてたらtrueを返す
-  def following?(other_user)
-    following.include?(other_user)
+  def following?(user)
+    following.include?(user)
   end
 end
