@@ -60,6 +60,10 @@
           <%= link_to "フォローする", user_relationships_path(user.id), method: :post, class: "btn btn-success" %>
         <% end %>
       <% end %>
+      <!--ここにチャットのリンクを貼る-->
+      <% if current_user != @user %>
+        <%= link_to 'チャットを始める', chat_path(@user.id) %>
+      <% end %>
     </div>
     <h2>New book</h2>
     <%= form_with model:book, local:true do |f| %>

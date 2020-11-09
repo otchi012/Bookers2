@@ -4,7 +4,6 @@ class BookCommentsController < ApplicationController
     comment = current_user.book_comments.new(book_comment_params)
     comment.book_id = @book.id
     comment.save
-    @count = @book.book_comments.count
   end
 
   def destroy

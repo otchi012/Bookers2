@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <h2 id="room" data-room="<%= @room.id %>" data-user=<% current_user.id %>>
+        <%= @user.name %> さんとのチャット
+      </h2>
+      <table class="message">
+        <!--%= render 'chats/index', user: @user, chats: @chats %>-->
+        <% @chats.each do |chat| %>
+          <%if chat.user_id == current_user.id %>
+            <tbody>
+              <tr>
+                <td><%= chat.message %></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          <% else %>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td><%= chat.message %></td>
+              </tr>
+            </tbody>
+          <% end %>
+        <% end %>
+      </table>
+
+      <%= form_with model:@chat do |f| %>
+        <%= f.text_field :message %>
+        <%= f.hidden_field :room_id %>
+      <% end %>
+    </div>
+  </div>
+</div>
